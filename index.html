@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Next Move — a free tool from Until Unless Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#FFFFFF;
+    --navy-900:#FFFFFF;
+    --navy-800:#FFFAE5;
+    --navy-700:rgba(0,0,0,0.14);
+    --gold-500:#000000;
+    --gold-300:#262626;
+    --gold-100:#FFFAE5;
+    --ivory:#000000;
+    --slate-400:rgba(0,0,0,0.52);
+    --slate-300:rgba(0,0,0,0.72);
+    --danger:#B3261E;
+    --radius:14px;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Work Sans', -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--navy-950);color:var(--ivory);font-family:var(--sans);line-height:1.55;}
+  .page{max-width:760px;margin:0 auto;padding:0 24px 100px;}
+  a{color:var(--gold-300);}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:72px 0 40px;text-align:center;}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-300);font-weight:600;margin-bottom:22px;}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(32px,5.4vw,52px);line-height:1.08;margin:0 0 18px;letter-spacing:-0.01em;}
+  .hero h1 em{font-style:italic;color:var(--gold-300);font-weight:500;}
+  .hero p{font-size:17px;color:var(--slate-300);max-width:480px;margin:0 auto 40px;}
+
+  .compass-wrap{margin:0 auto 40px;width:150px;height:150px;position:relative;}
+  .compass-wrap svg{width:100%;height:100%;overflow:visible;}
+  .needle{transform-origin:75px 75px;transition:transform 1.4s cubic-bezier(.34,1.56,.64,1);}
+  .hero .needle{animation:idle-swing 5s ease-in-out infinite;}
+  @keyframes idle-swing{
+    0%,100%{transform:rotate(-8deg);}
+    50%{transform:rotate(8deg);}
+  }
+  .compass-label{position:absolute;font-family:var(--sans);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-400);}
+
+  .cta-btn{appearance:none;border:none;cursor:pointer;background:var(--gold-500);color:var(--navy-950);font-family:var(--sans);font-weight:600;font-size:15px;padding:14px 30px;border-radius:999px;transition:background .15s ease, transform .15s ease;}
+  .cta-btn:hover{background:var(--gold-300);transform:translateY(-1px);}
+  .cta-btn:active{transform:translateY(0);}
+  .cta-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+  /* ---------- FORM ---------- */
+  .card{background:var(--navy-900);border:1px solid var(--navy-700);border-radius:var(--radius);padding:36px 32px;margin-top:8px;box-shadow:0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.05);}
+  .card h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 6px;}
+  .card .sub{color:var(--slate-400);font-size:14px;margin:0 0 32px;}
+
+  .field{margin-bottom:26px;}
+  .field label{display:block;font-size:14.5px;font-weight:500;color:var(--ivory);margin-bottom:8px;}
+  .field .hint{display:block;font-size:12.5px;color:var(--slate-400);font-weight:400;margin-top:4px;}
+  .field input[type="number"],
+  .field input[type="email"],
+  .field select{
+    width:100%;background:var(--navy-800);border:1px solid var(--navy-700);color:var(--ivory);
+    font-family:var(--sans);font-size:15px;padding:12px 14px;border-radius:9px;outline:none;
+    transition:border-color .15s ease;
+  }
+  .field input:focus, .field select:focus{border-color:var(--gold-500);}
+  .field select{appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%23000000" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');background-repeat:no-repeat;background-position:right 14px center;}
+
+  .offer-row{display:flex;align-items:center;gap:10px;background:var(--navy-800);border:1px solid var(--navy-700);border-radius:9px;padding:12px 14px;margin-bottom:10px;}
+  .offer-row input[type="checkbox"]{width:18px;height:18px;accent-color:var(--gold-500);flex-shrink:0;}
+  .offer-row label{font-size:14.5px;flex:1;margin:0;cursor:pointer;}
+  .offer-row .price-input{width:110px;background:var(--navy-950);border:1px solid var(--navy-700);color:var(--ivory);font-size:14px;padding:8px 10px;border-radius:7px;display:none;}
+  .offer-row.checked .price-input{display:block;}
+
+  .upload-box{border:1.5px dashed var(--navy-700);border-radius:9px;padding:22px;text-align:center;cursor:pointer;transition:border-color .15s ease, background .15s ease;}
+  .upload-box:hover{border-color:var(--gold-500);background:var(--navy-800);}
+  .upload-box.has-file{border-style:solid;border-color:var(--gold-500);}
+  .upload-box input{display:none;}
+  .upload-box .upload-text{font-size:14px;color:var(--slate-300);}
+  .upload-box .upload-sub{font-size:12.5px;color:var(--slate-400);margin-top:4px;}
+  .thumb-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+  .thumb-row img{max-width:90px;max-height:90px;border-radius:7px;object-fit:cover;}
+
+  .submit-row{margin-top:34px;text-align:center;}
+  .error-msg{color:var(--danger);font-size:13.5px;margin-top:14px;text-align:center;display:none;}
+
+  /* ---------- LOADING ---------- */
+  .loading{display:none;text-align:center;padding:70px 0;}
+  .loading .compass-wrap{width:110px;height:110px;}
+  .loading .needle{animation:spin-settle 1.8s ease-in-out infinite;}
+  @keyframes spin-settle{
+    0%{transform:rotate(0deg);}
+    50%{transform:rotate(200deg);}
+    100%{transform:rotate(360deg);}
+  }
+  .loading p{color:var(--slate-300);font-size:14.5px;margin-top:20px;}
+
+  /* ---------- RESULT ---------- */
+  .result{display:none;}
+  .result-compass{text-align:center;padding:30px 0 10px;}
+  .result-compass .compass-wrap{width:170px;height:170px;}
+  .category-word{display:inline-block;font-family:var(--serif);font-weight:600;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:#000000;background:var(--gold-100);border:1px solid rgba(0,0,0,0.15);padding:6px 16px;border-radius:999px;margin-top:10px;}
+  .result h2{font-family:var(--serif);font-weight:600;font-size:clamp(24px,4vw,32px);line-height:1.22;text-align:center;margin:18px 0 32px;padding:0 10px;}
+  .result-body p{font-size:16px;color:var(--slate-300);margin:0 0 18px;}
+  .skip-box{background:var(--navy-800);border-left:3px solid var(--gold-500);border-radius:0 9px 9px 0;padding:16px 18px;margin-top:26px;}
+  .skip-box .label{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-300);font-weight:600;margin-bottom:6px;}
+  .skip-box p{margin:0;font-size:14.5px;color:var(--slate-300);}
+  .result-footer{text-align:center;margin-top:44px;padding-top:32px;border-top:1px solid var(--navy-700);}
+  .result-footer p{font-size:13.5px;color:var(--slate-400);margin-bottom:16px;}
+  .retry-link{background:none;border:none;color:var(--gold-300);font-family:var(--sans);font-size:13.5px;cursor:pointer;text-decoration:underline;}
+
+  .recap-strip{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px;}
+  .recap-pill{background:var(--navy-800);border:1px solid var(--navy-700);border-radius:999px;padding:7px 14px;font-size:12.5px;color:var(--slate-300);}
+  .recap-pill b{color:var(--ivory);font-weight:600;}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px;}
+  .stat-card{background:var(--navy-800);border:1px solid var(--navy-700);border-radius:10px;padding:16px 14px;text-align:center;}
+  .stat-card .stat-value{font-family:var(--serif);font-weight:600;font-size:24px;color:var(--gold-300);line-height:1.1;}
+  .stat-card .stat-label{font-size:11px;letter-spacing:.04em;color:var(--slate-400);margin-top:5px;text-transform:uppercase;}
+  .snapshot-sub{text-align:center;font-size:12px;color:var(--slate-400);margin:-8px 0 24px;}
+
+  .next-steps{list-style:none;margin:0 0 28px;padding:0;counter-reset:step;}
+  .next-steps li{position:relative;padding:0 0 18px 40px;counter-increment:step;}
+  .next-steps li::before{content:counter(step);position:absolute;left:0;top:-2px;width:26px;height:26px;border-radius:50%;background:var(--navy-800);border:1px solid var(--gold-500);color:var(--gold-300);font-family:var(--serif);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;}
+  .next-steps .step-title{display:block;font-size:15.5px;font-weight:600;color:var(--ivory);margin-bottom:2px;}
+  .next-steps .step-detail{display:block;font-size:13.5px;color:var(--slate-400);line-height:1.45;}
+
+  .positioning-box{background:var(--navy-800);border:1px dashed var(--gold-500);border-radius:9px;padding:18px 20px;margin-bottom:26px;}
+  .positioning-box .label{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-300);font-weight:600;margin-bottom:4px;}
+  .positioning-box .sub{font-size:12.5px;color:var(--slate-400);margin-bottom:12px;}
+  .positioning-box ol{margin:0;padding-left:20px;}
+  .positioning-box li{font-size:14px;color:var(--slate-300);margin-bottom:8px;}
+
+  .hook-box{background:var(--navy-800);border-radius:9px;padding:18px 20px;margin-bottom:26px;border:1px solid var(--navy-700);}
+  .hook-box .label{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-300);font-weight:600;margin-bottom:8px;}
+  .hook-box p{font-family:var(--serif);font-style:italic;font-size:16.5px;color:var(--ivory);margin:0;line-height:1.5;}
+
+  .problem-line{font-size:15px;color:var(--slate-300);background:none;border-left:3px solid var(--navy-700);padding:2px 0 2px 16px;margin-bottom:28px;}
+
+  .funnel-stage{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--navy-700);}
+  .funnel-stage:last-child{border-bottom:none;}
+  .funnel-stage-name{flex:0 0 108px;font-family:var(--serif);font-weight:600;font-size:15px;color:var(--gold-300);letter-spacing:.02em;}
+  .funnel-stage-tactic{flex:1;font-size:15px;color:var(--slate-300);}
+
+  footer.site{text-align:center;padding:50px 0 0;color:var(--slate-400);font-size:12.5px;}
+
+  .fatal-banner{display:none;background:#FBEAE8;border:1px solid var(--danger);color:#7A1E17;font-size:13px;padding:14px 16px;border-radius:9px;margin:16px 0;}
+
+  .brandbar{display:flex;align-items:baseline;justify-content:center;gap:10px;padding:28px 0 0;flex-wrap:wrap;}
+  .brandbar .brand-name{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:-0.01em;color:#000000;}
+  .brandbar .brand-by{font-size:12px;color:rgba(0,0,0,0.5);}
+
+  /* ---------- ADMIN (leads view) ---------- */
+  .admin-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:20px;}
+  .admin-table th,.admin-table td{border:1px solid var(--navy-700);padding:8px 10px;text-align:left;}
+  .admin-table th{background:var(--navy-800);color:var(--gold-300);}
+
+  @media(max-width:520px){
+    .hero{padding:52px 0 30px;}
+    .card{padding:28px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page" id="mainPage">
+
+  <div class="fatal-banner" id="fatalBanner"></div>
+
+  <div class="brandbar">
+    <span class="brand-name">Next Move</span>
+    <span class="brand-by">by Until Unless Marketing</span>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow">A free tool for people building something</div>
+    <h1>What should you <em>actually</em> build next?</h1>
+    <p>Not another framework to sit in a tab. Just an honest read on where things stand — and the one move that makes sense from here.</p>
+
+    <div class="compass-wrap" id="heroCompass"></div>
+
+    <button class="cta-btn" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth'});">Find my next move</button>
+  </div>
+
+  <div class="card" id="formCard">
+    <h2>Tell me where things stand</h2>
+    <p class="sub">Be honest, not aspirational — the numbers you have today, not the ones you're hoping for.</p>
+
+    <form id="moveForm">
+      <div class="field">
+        <label for="followers">How many people follow you on LinkedIn?</label>
+        <input type="number" id="followers" min="0" placeholder="e.g. 1,200" required />
+      </div>
+
+      <div class="field">
+        <label for="frequency">How many times a week are you actually posting — not planning to, actually doing?</label>
+        <select id="frequency" required>
+          <option value="" disabled selected>Choose one</option>
+          <option value="0-1 times a week">0–1 times a week</option>
+          <option value="1-2 times a week">1–2 times a week</option>
+          <option value="2-3 times a week">2–3 times a week</option>
+          <option value="3-5 times a week">3–5 times a week</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="sellDescription">In one line, what's your offer?</label>
+        <input type="text" id="sellDescription" placeholder="e.g. A 90-day 1:1 coaching program for first-time managers" />
+      </div>
+
+      <div class="field">
+        <label for="niche">What industry or niche are you in?</label>
+        <input type="text" id="niche" placeholder="e.g. Executive coaching for tech leaders" required />
+      </div>
+
+      <div class="field">
+        <label>Do you currently have any of these live?</label>
+        <span class="hint" style="margin-bottom:12px;display:block;">Check everything that's actually live right now — we'll get to pricing later, this is just about what exists.</span>
+
+        <div class="offer-row" id="row-leadMagnet">
+          <input type="checkbox" id="leadMagnet" />
+          <label for="leadMagnet">A free lead magnet (guide, checklist, mini-course)</label>
+        </div>
+
+        <div class="offer-row" id="row-oneOnOne">
+          <input type="checkbox" id="oneOnOne" />
+          <label for="oneOnOne">1:1 or consulting work</label>
+        </div>
+
+        <div class="offer-row" id="row-product">
+          <input type="checkbox" id="product" />
+          <label for="product">A paid digital product (course, template, membership)</label>
+        </div>
+
+        <div class="offer-row" id="row-other">
+          <input type="checkbox" id="other" />
+          <label for="other">Something else</label>
+          <input type="text" class="price-input" id="otherText" placeholder="What is it?" style="width:160px;" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="listSize">How many people are on your email list?</label>
+        <input type="number" id="listSize" min="0" placeholder="0 if you don't have one yet" required />
+      </div>
+
+      <div class="field">
+        <label for="emailFrequency">How often do you actually email that list?</label>
+        <select id="emailFrequency" required>
+          <option value="" disabled selected>Choose one</option>
+          <option value="Never">Never — I have the list but don't email it</option>
+          <option value="Rarely">Rarely — a few times a year</option>
+          <option value="Monthly">About once a month</option>
+          <option value="Weekly or more">Weekly or more</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="nurtureSequence">Does a new subscriber get anything automatically — a welcome email, a sequence?</label>
+        <select id="nurtureSequence">
+          <option value="" disabled selected>Choose one</option>
+          <option value="Yes">Yes, they get something automatic</option>
+          <option value="No">No, nothing happens automatically</option>
+          <option value="Not sure">Not sure / haven't checked</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="goal">What are you actually hoping happens in the next 90 days?</label>
+        <select id="goal" required>
+          <option value="" disabled selected>Choose one</option>
+          <option value="Grow my audience">Grow my audience</option>
+          <option value="Get more leads/inquiries">Get more leads or inquiries</option>
+          <option value="Make more sales">Make more sales from what I already offer</option>
+          <option value="Free up my time">Free up my time — stop trading hours for money</option>
+          <option value="Not sure yet">Honestly, not sure yet</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="problem">What's the one problem you're actually stuck on right now?</label>
+        <textarea id="problem" rows="3" placeholder="e.g. I don't know if I should build a course or keep doing 1:1 calls" style="width:100%;background:var(--navy-800);border:1px solid var(--navy-700);color:var(--ivory);font-family:var(--sans);font-size:15px;padding:12px 14px;border-radius:9px;outline:none;resize:vertical;"></textarea>
+        <span class="hint">This is the part a spreadsheet can't tell me — be specific.</span>
+      </div>
+
+      <div class="field">
+        <label for="linkedinUrl">Your LinkedIn profile link <span style="color:var(--slate-400);font-weight:400;">(optional)</span></label>
+        <input type="text" id="linkedinUrl" placeholder="linkedin.com/in/you" />
+        <span class="hint">Just for context on our end — I can't pull data from it automatically, LinkedIn doesn't allow that.</span>
+      </div>
+
+      <div class="field">
+        <label>Drop in your LinkedIn analytics screenshot from the past 90 days <span style="color:var(--slate-400);font-weight:400;">(optional, but genuinely helps)</span></label>
+        <div class="upload-box" id="uploadBox">
+          <input type="file" id="screenshotInput" accept="image/*" multiple />
+          <div class="upload-text" id="uploadText">Click to upload screenshots</div>
+          <div class="upload-sub">On your LinkedIn profile: Analytics → Post impressions, last 90 days. A couple of post screenshots work too if that's easier.</div>
+          <div class="thumb-row" id="thumbRow"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Where should I send your result?</label>
+        <input type="email" id="email" placeholder="you@email.com" required />
+        <span class="hint">You'll see it on this page too — no waiting on an inbox.</span>
+      </div>
+
+      <div class="submit-row">
+        <button type="button" class="cta-btn" id="submitBtn">Show me my next move</button>
+        <div class="error-msg" id="errorMsg"></div>
+      </div>
+    </form>
+  </div>
+
+  <div class="loading" id="loadingSection">
+    <div class="compass-wrap" id="loadingCompass"></div>
+    <p id="loadingText">Reading your numbers…</p>
+  </div>
+
+  <div class="result card" id="resultSection">
+    <div class="result-compass">
+      <div class="compass-wrap" id="resultCompass"></div>
+      <div class="category-word" id="categoryWord"></div>
+    </div>
+    <div class="stat-grid" id="statGrid"></div>
+    <p class="snapshot-sub">Your snapshot — from what you told me, not pulled from LinkedIn</p>
+    <div class="recap-strip" id="recapStrip"></div>
+    <h2 id="resultHeadline"></h2>
+    <p class="problem-line" id="problemConnection" style="display:none;"></p>
+    <div class="result-body" id="resultBody"></div>
+    <ol class="next-steps" id="nextSteps"></ol>
+    <div class="positioning-box" id="positioningBox" style="display:none;">
+      <div class="label">Since you're not clear on your offer yet</div>
+      <div class="sub">A few questions to sit with — not the full answer, just a start.</div>
+      <ol id="positioningList"></ol>
+    </div>
+    <div class="hook-box" id="hookBox" style="display:none;">
+      <div class="label">A hook you could post this week</div>
+      <p id="hookText"></p>
+    </div>
+    <div class="skip-box">
+      <div class="label">What you can leave alone for now</div>
+      <p id="resultSkip"></p>
+    </div>
+    <div class="result-footer">
+      <p>Want the exact launch strategy built around this — not just the next move, but the full funnel?</p>
+      <button class="cta-btn" id="unlockFunnelBtn">Get my exact launch strategy</button>
+      <div style="margin-top:18px;">
+        <button class="retry-link" onclick="resetForm()">Run this again with different numbers</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="funnelGateCard" style="display:none;">
+    <h2>A few more details and I'll build it</h2>
+    <p class="sub">This is what actually shapes the funnel — not what you're building, but how you're going to get there. No pricing questions — that's a separate conversation.</p>
+
+    <div class="field">
+      <label for="timePerWeek">Realistically, how many hours a week can you give this?</label>
+      <select id="timePerWeek">
+        <option value="" disabled selected>Choose one</option>
+        <option value="Less than 2 hours">Less than 2 hours</option>
+        <option value="2-5 hours">2–5 hours</option>
+        <option value="5-10 hours">5–10 hours</option>
+        <option value="10+ hours">10+ hours</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="adBudget">Any budget for ads, or is this organic-only?</label>
+      <select id="adBudget">
+        <option value="" disabled selected>Choose one</option>
+        <option value="No budget - organic only">No budget — organic only</option>
+        <option value="Some budget">Some budget, haven't used it yet</option>
+        <option value="Not sure yet">Not sure yet</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="timeline">What's your target timeline?</label>
+      <select id="timeline">
+        <option value="" disabled selected>Choose one</option>
+        <option value="ASAP - within a few weeks">ASAP — within a few weeks</option>
+        <option value="Next 30 days">Next 30 days</option>
+        <option value="Next 90 days">Next 90 days</option>
+        <option value="No rush, just exploring">No rush, just exploring</option>
+      </select>
+    </div>
+
+    <div class="submit-row">
+      <button type="button" class="cta-btn" id="funnelSubmitBtn">Build my launch strategy</button>
+      <div class="error-msg" id="funnelErrorMsg"></div>
+    </div>
+  </div>
+
+  <div class="loading" id="funnelLoadingSection" style="display:none;">
+    <div class="compass-wrap" id="funnelLoadingCompass"></div>
+    <p id="funnelLoadingText">Mapping the funnel…</p>
+  </div>
+
+  <div class="result card" id="funnelResultSection" style="display:none;">
+    <h2 style="text-align:center;">Your launch funnel, stage by stage</h2>
+    <p class="result-body" id="funnelIntro" style="color:var(--slate-300);text-align:center;margin-bottom:30px;"></p>
+    <div id="funnelStages"></div>
+    <p class="problem-line" id="funnelTimelineNote" style="margin-top:8px;"></p>
+    <div class="result-footer">
+      <p id="funnelClosing" style="margin-bottom:22px;"></p>
+      <button class="retry-link" onclick="resetForm()">Start over with different numbers</button>
+    </div>
+  </div>
+
+  <footer class="site">Until Unless Marketing — built for people making things, not just posting about them.</footer>
+
+</div>
+
+<script>
+window.addEventListener('error', function(e){
+  const banner = document.getElementById('fatalBanner');
+  if(banner){
+    banner.style.display = 'block';
+    banner.textContent = 'Something in the page broke: ' + (e.message || 'unknown error') + '. Try refreshing — if it keeps happening, this needs a code fix, not a retry.';
+  }
+});
+
+function compassSVG(id, size){
+  return `
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="75" cy="75" r="66" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+    <circle cx="75" cy="75" r="3" fill="#000000"/>
+    ${[0,51,103,154,206,257,309].map(a=>{
+      const rad = (a-90) * Math.PI/180;
+      const x1 = 75 + 58*Math.cos(rad), y1 = 75 + 58*Math.sin(rad);
+      const x2 = 75 + 66*Math.cos(rad), y2 = 75 + 66*Math.sin(rad);
+      return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(0,0,0,0.42)" stroke-width="1.5"/>`;
+    }).join('')}
+    <g class="needle" id="${id}">
+      <polygon points="75,22 68,80 75,90 82,80" fill="#FFFAE5" stroke="#000000" stroke-width="1.2" stroke-linejoin="round"/>
+      <polygon points="75,128 68,80 75,70 82,80" fill="#000000"/>
+    </g>
+  </svg>`;
+}
+document.getElementById('heroCompass').innerHTML = compassSVG('heroNeedle');
+document.getElementById('loadingCompass').innerHTML = compassSVG('loadingNeedle');
+document.getElementById('resultCompass').innerHTML = compassSVG('resultNeedle');
+
+// ---- offer row checkbox toggling ----
+['leadMagnet','oneOnOne','product','other'].forEach(id=>{
+  const cb = document.getElementById(id);
+  const row = document.getElementById('row-'+id);
+  cb.addEventListener('change', ()=> row.classList.toggle('checked', cb.checked));
+});
+
+// ---- screenshot upload (up to 3) ----
+let screenshots = []; // [{base64, mediaType}]
+const uploadBox = document.getElementById('uploadBox');
+const screenshotInput = document.getElementById('screenshotInput');
+const thumbRow = document.getElementById('thumbRow');
+uploadBox.addEventListener('click', ()=> screenshotInput.click());
+screenshotInput.addEventListener('change', (e)=>{
+  const files = Array.from(e.target.files).slice(0, 3);
+  screenshots = [];
+  thumbRow.innerHTML = '';
+  if(files.length === 0) return;
+  let loaded = 0;
+  files.forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      screenshots.push({ base64: reader.result.split(',')[1], mediaType: file.type });
+      const img = document.createElement('img');
+      img.src = reader.result;
+      thumbRow.appendChild(img);
+      loaded++;
+      if(loaded === 1){
+        document.getElementById('uploadText').textContent = files.length + ' screenshot' + (files.length>1?'s':'') + ' added';
+        uploadBox.classList.add('has-file');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+// ---- compass category angles ----
+const CATEGORY_INFO = {
+  CAPTURE:    { angle: 0,   label: 'Capture' },
+  ENGAGE:     { angle: 51,  label: 'Engage' },
+  TEST:       { angle: 103, label: 'Test' },
+  PRODUCTIZE: { angle: 154, label: 'Productize' },
+  RECONNECT:  { angle: 206, label: 'Reconnect' },
+  REALIGN:    { angle: 257, label: 'Realign' },
+  SIMPLIFY:   { angle: 309, label: 'Simplify' }
+};
+
+const loadingMessages = [
+  "Reading your numbers…",
+  "Looking at what you're already doing…",
+  "Checking if your content matches your offer…",
+  "Finding the one move that actually matters…"
+];
+
+const SYSTEM_PROMPT = `You are the analysis engine behind a free tool from "Until Unless Marketing," a boutique marketing agency for coaches, speakers, and solopreneurs. The tool finds the ONE real gap in a digital product creator's funnel right now — based on their LinkedIn followers, posting frequency, niche, email list size, how often they actually email that list, whether new subscribers get an automated welcome sequence, current offers, their stated 90-day goal, and the one problem they say they're stuck on.
+
+TONE — this matters more than anything else: warm, relatable, plain-spoken, like a smart friend who's been through it, not a consultant reading out a scorecard. NEVER use words like "tier," "stage," "audit," "diagnostic," "signal," "metric," "KPI," or any business-jargon label. Write in second person ("you"). Short sentences. No corporate hedging. It's okay to be direct, but never make the person feel stupid or behind — the goal is relief and clarity, not anxiety.
+
+SPECIFICITY IS THE WHOLE POINT — this is what separates a good answer from a generic one. Every response must reference the person's actual numbers, niche, and their actual stated problem/goal by name, not just categorize them and give boilerplate advice. If they said their problem is "I don't know if I should build a course or keep doing 1:1," your answer needs to actually take a position on THAT, not just gesture at "clarity around offers." Never write anything that could have been generated without reading what they actually typed.
+
+FRAMEWORK — classify the person into exactly ONE of these seven categories based on where their inputs disagree with each other (the mismatch IS the funnel gap — not the raw numbers):
+
+- CAPTURE: Some audience, no email list, no offer. Attention with no way to keep it. Move: build ONE lead magnet, nothing else, until an email list exists.
+- ENGAGE: Has an email list of any real size but emails it "Never" or "Rarely," and/or has no automated welcome sequence for new subscribers. A list nobody hears from isn't an asset yet — it's a spreadsheet. Move: before building or testing anything new, start emailing consistently (weekly is enough) and put a simple welcome sequence in place. This usually outranks TEST or PRODUCTIZE even if those also technically apply — a cold list can't validate anything.
+- TEST: Emails at least monthly, has a real list, but hasn't tested paid monetization (no 1:1, no paid product). Sitting on trust they've actually built but haven't spent. Move: run a low-stakes paid pilot or 1:1 before building a full product.
+- PRODUCTIZE: Does 1:1/consulting, has meaningful followers (roughly 2,500+) or list (roughly 500+), but no productized offer. Trading hours for money at a size where that stops making sense. Move: turn the repeatable part of the 1:1 into a digital product.
+- RECONNECT: Posting "0-1 times a week" or "1-2 times a week" despite having meaningful followers (2,500+) or list (500+) — built something and went quiet. Move: fix visibility before building anything new.
+- REALIGN: Based on the screenshot(s) if provided, content style is mismatched with the offer's trust requirement (e.g. tutorial content but a high-ticket, trust-dependent offer). Move: shift content toward personal story + point of view before pushing the offer harder.
+- SIMPLIFY: Everything reasonably aligned AND already at a meaningful stage (decent followers AND list AND emailing weekly+ AND at least one paid offer AND posting 2-3 times a week or more). Move: don't build anything new — remove friction in what already exists.
+
+If more than one category could apply, pick the ONE that represents the biggest gap between what they've built and what they're missing, weighing their stated goal and problem heavily — and remember ENGAGE usually comes before TEST or PRODUCTIZE if the list is genuinely cold.
+
+POSITIONING SIGNAL — separately, detect whether this person sounds unclear on their offer or positioning (their "problem" text mentions confusion about what to build/sell/say, or their "what they sell" line is vague, generic, or missing, or they checked no offers at all AND said "Not sure yet" for their goal). If so, this needs its own short, distinct nudge — not folded into the next steps.
+
+Respond with ONLY valid JSON, no markdown fences, no preamble, in this exact shape:
+{
+  "category": "ONE_OF_THE_SEVEN_CATEGORY_NAMES_ABOVE",
+  "headline": "A single warm, specific sentence (max ~18 words) naming what's really going on for them — written like a friend would say it.",
+  "problem_connection": "1-2 sentences that speak DIRECTLY to the specific problem they typed in, taking an actual position on it (not vague reassurance). If they left the problem field blank, make this an empty string.",
+  "body": ["One short paragraph (2-3 sentences) naming what you're noticing about their specific situation, referencing their actual numbers, niche, and stated goal by name."],
+  "next_steps": [
+    {"title": "A short punchy action phrase, 4-8 words, imperative voice — this is the headline of the step, not a full sentence.", "detail": "One short supporting sentence (max ~16 words) with the specific how or why — the texture, not another instruction."},
+    {"title": "Second step title, same style, sequenced after step 1.", "detail": "Its one-line detail."},
+    {"title": "Third step title — often 'how you'll know it's working' rather than another action.", "detail": "Its one-line detail."}
+  ],
+  "positioning_nudge": ["Only include this array with exactly 3 short, concrete self-reflection prompts (each under 14 words, phrased as a question they answer for themselves) if the POSITIONING SIGNAL above is present. Otherwise this must be an empty array []. These are prompts, not advice — things like naming their exact ideal client in one sentence, naming the one result they deliver, naming why someone should pick them over the obvious alternative — tailored to their niche and problem, not generic marketing-101 questions."],
+  "example_hook": "A single literal example opening line for a LinkedIn post they could write this week, written in first person as if they wrote it, following a 'specific real moment, then a clear point of view' structure. Make it feel like it was written for their exact situation and niche, not generic. If a screenshot was provided, let its actual content/voice inform this. If genuinely nothing useful can be produced (no context at all), make this an empty string.",
+  "skip": "One warm sentence about what they can safely ignore or stop worrying about for now — permission to NOT do something."
+}`;
+
+const FUNNEL_SYSTEM_PROMPT = `You are building a deeper, more tactical launch funnel breakdown for a digital product creator, for "Until Unless Marketing." They already received a short read on the one gap in their funnel; now they've asked for the full picture and given more detail: weekly time budget, ad budget situation, and target timeline. Pricing is deliberately NOT part of this — that's a separate step later, so never suggest specific prices or price ranges.
+
+TONE — same as before: warm, plain-spoken, second person, zero jargon ("tier," "audit," "signal," "KPI," "funnel stage optimization" and similar are all banned). Write like someone who has actually built funnels for six years and is walking a friend through exactly what to do, not narrating a framework at them.
+
+SPECIFICITY — reference their actual numbers, niche, stated goal, stated problem, what they sell, their email habits, their time budget, and their timeline throughout. Every stage recommendation should feel like it could only apply to this specific person, not a generic funnel template.
+
+Respect their constraints as real constraints: if they have no ad budget, every recommendation must be organic/no-ad-spend — borrowed audience tactics (guest appearances, collaborations, engaging on other people's posts, partnerships), not paid acquisition. If their time budget is low, don't recommend a 5-times-a-week content plan. If their timeline is tight, sequence accordingly and say what to cut. If they said they rarely or never email their list, or have no welcome sequence, the Nurture stage needs to fix that before anything fancier.
+
+Produce a 5-stage funnel: Attract, Capture, Nurture, Convert, Deliver. For EACH stage give exactly ONE concrete, specific tactic — not a menu of options, the one thing that fits their situation. Never mention prices or dollar amounts anywhere in your response.
+
+Respond with ONLY valid JSON, no markdown fences, no preamble, in this exact shape:
+{
+  "intro": "2-3 warm sentences summarizing the overall strategy in plain language, referencing their specific numbers, niche, and timeline. No prices.",
+  "stages": [
+    {"name": "Attract", "tactic": "One concrete, specific tactic for how they get seen by the right people in their niche, respecting their time/budget constraints."},
+    {"name": "Capture", "tactic": "One concrete tactic for turning attention into an email address or contact — reference their actual list size."},
+    {"name": "Nurture", "tactic": "One concrete tactic for building trust before the ask, sized to their time budget — address their email frequency and nurture sequence gaps directly if they have any."},
+    {"name": "Convert", "tactic": "One concrete tactic for the actual sale/signup — how, not how much."},
+    {"name": "Deliver", "tactic": "One concrete tactic for what happens after they buy, so early customers become proof/referrals."}
+  ],
+  "timeline_note": "1-2 sentences tying the whole sequence to their stated timeline — what to do first, what can wait.",
+  "closing": "One warm, encouraging closing line — not generic, tied to something specific they told you."
+}`;
+
+async function analyzeWithClaude(data){
+  const userContent = [];
+  let textPrompt = `Here's what this person told me about themselves:
+- LinkedIn followers: ${data.followers}
+- Posting frequency: ${data.frequency}
+- What they sell / who it's for: ${data.sellDescription || '(not specified)'}
+- Industry/niche: ${data.niche}
+- Email list size: ${data.listSize}
+- How often they email that list: ${data.emailFrequency}
+- Automated welcome/nurture sequence for new subscribers: ${data.nurtureSequence || '(not specified)'}
+- Current offers: ${data.offersSummary}
+- 90-day goal: ${data.goal}
+- Problem they say they're stuck on: ${data.problem || '(left blank)'}
+`;
+  if(data.linkedinUrl){
+    textPrompt += `- LinkedIn profile (context only, not analyzed automatically): ${data.linkedinUrl}\n`;
+  }
+  if(screenshots.length){
+    textPrompt += `\nThey also uploaded ${screenshots.length} screenshot(s), likely including LinkedIn analytics from the past 90 days — read any visible metrics (impressions, engagement trend) as well as content style, and factor both into your read.`;
+  }
+  userContent.push({ type: "text", text: textPrompt });
+  screenshots.forEach(s=>{
+    userContent.push({ type: "image", source: { type: "base64", media_type: s.mediaType || "image/png", data: s.base64 } });
+  });
+
+  const response = await fetch("/api/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      system: SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userContent }]
+    })
+  });
+
+  if(!response.ok){
+    throw new Error("API request failed: " + response.status);
+  }
+  const responseData = await response.json();
+  const textBlock = responseData.content.find(b => b.type === "text");
+  if(!textBlock) throw new Error("No text in response");
+  const cleaned = textBlock.text.replace(/```json|```/g, "").trim();
+  return JSON.parse(cleaned);
+}
+
+async function analyzeFunnel(data){
+  const userContent = [];
+  let textPrompt = `Here's everything I know about this person.
+
+From their first pass:
+- LinkedIn followers: ${data.followers}
+- Posting frequency: ${data.frequency}
+- What they sell / who it's for: ${data.sellDescription || '(not specified)'}
+- Industry/niche: ${data.niche}
+- Email list size: ${data.listSize}
+- How often they email that list: ${data.emailFrequency}
+- Automated welcome/nurture sequence: ${data.nurtureSequence || '(not specified)'}
+- Current offers: ${data.offersSummary}
+- 90-day goal: ${data.goal}
+- Problem they said they're stuck on: ${data.problem || '(left blank)'}
+- The funnel gap they already got: ${data.category} — "${data.headline}"
+
+New detail for the full strategy:
+- Hours per week they can give this: ${data.timePerWeek}
+- Ad budget: ${data.adBudget}
+- Target timeline: ${data.timeline}
+`;
+  if(screenshots.length){
+    textPrompt += `\nThey also uploaded ${screenshots.length} screenshot(s) of their recent content earlier — factor that content style in too.`;
+  }
+  userContent.push({ type: "text", text: textPrompt });
+  screenshots.forEach(s=>{
+    userContent.push({ type: "image", source: { type: "base64", media_type: s.mediaType || "image/png", data: s.base64 } });
+  });
+
+  const response = await fetch("/api/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      system: FUNNEL_SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userContent }]
+    })
+  });
+
+  if(!response.ok){
+    throw new Error("API request failed: " + response.status);
+  }
+  const responseData = await response.json();
+  const textBlock = responseData.content.find(b => b.type === "text");
+  if(!textBlock) throw new Error("No text in response");
+  const cleaned = textBlock.text.replace(/```json|```/g, "").trim();
+  return JSON.parse(cleaned);
+}
+
+function rotateNeedle(elId, angle, delay){
+  setTimeout(()=>{
+    const el = document.getElementById(elId);
+    if(el) el.style.transform = `rotate(${angle}deg)`;
+  }, delay || 0);
+}
+
+let loadingInterval = null;
+let tier1Data = null;
+let currentLeadPayload = null;
+
+document.getElementById('submitBtn').addEventListener('click', async ()=>{
+  const errorMsg = document.getElementById('errorMsg');
+  errorMsg.style.display = 'none';
+
+  const followers = document.getElementById('followers').value;
+  const frequency = document.getElementById('frequency').value;
+  const sellDescription = document.getElementById('sellDescription').value.trim();
+  const niche = document.getElementById('niche').value.trim();
+  const listSize = document.getElementById('listSize').value;
+  const emailFrequency = document.getElementById('emailFrequency').value;
+  const nurtureSequence = document.getElementById('nurtureSequence').value;
+  const goal = document.getElementById('goal').value;
+  const problem = document.getElementById('problem').value.trim();
+  const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
+  const email = document.getElementById('email').value;
+
+  if(!followers || !frequency || !niche || !listSize || !emailFrequency || !goal || !email){
+    errorMsg.textContent = "Just missing a field or two above — followers, posting frequency, niche, list size, email frequency, goal, and email all need something in them.";
+    errorMsg.style.display = 'block';
+    return;
+  }
+  if(!email.includes('@') || !email.includes('.')){
+    errorMsg.textContent = "That email doesn't look quite right — mind double-checking it?";
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  const offers = [];
+  if(document.getElementById('leadMagnet').checked) offers.push('Free lead magnet');
+  if(document.getElementById('oneOnOne').checked) offers.push('1:1/consulting');
+  if(document.getElementById('product').checked) offers.push('Paid digital product');
+  if(document.getElementById('other').checked){
+    const t = document.getElementById('otherText').value.trim();
+    offers.push(t ? t : 'Something else (unspecified)');
+  }
+  const offersSummary = offers.length ? offers.join('; ') : 'No current offer';
+
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('loadingSection').style.display = 'block';
+  let msgIdx = 0;
+  document.getElementById('loadingText').textContent = loadingMessages[0];
+  loadingInterval = setInterval(()=>{
+    msgIdx = (msgIdx+1) % loadingMessages.length;
+    document.getElementById('loadingText').textContent = loadingMessages[msgIdx];
+  }, 1800);
+
+  try{
+    const result = await analyzeWithClaude({ followers, frequency, sellDescription, niche, listSize, emailFrequency, nurtureSequence, offersSummary, goal, problem, linkedinUrl });
+    clearInterval(loadingInterval);
+
+    tier1Data = { followers, frequency, sellDescription, niche, listSize, emailFrequency, nurtureSequence, offersSummary, goal, problem, linkedinUrl, email, category: result.category, headline: result.headline };
+
+    const info = CATEGORY_INFO[result.category] || CATEGORY_INFO.CAPTURE;
+    document.getElementById('categoryWord').textContent = info.label;
+    document.getElementById('resultHeadline').textContent = result.headline;
+
+    // stat grid — the "dashboard" snapshot, on-brand, not a LinkedIn mimic
+    const statGridEl = document.getElementById('statGrid');
+    statGridEl.innerHTML = '';
+    const stats = [
+      { value: followers, label: 'Followers' },
+      { value: frequency.split(' ')[0], label: 'Posts / week' },
+      { value: listSize, label: 'Email list' },
+      { value: emailFrequency, label: 'Email habit' }
+    ];
+    stats.forEach(s=>{
+      const card = document.createElement('div');
+      card.className = 'stat-card';
+      card.innerHTML = `<div class="stat-value">${s.value}</div><div class="stat-label">${s.label}</div>`;
+      statGridEl.appendChild(card);
+    });
+
+    // recap strip — the qualitative bits that don't fit a stat card
+    const recapEl = document.getElementById('recapStrip');
+    recapEl.innerHTML = '';
+    const pills = [
+      `niche: <b>${niche}</b>`,
+      `offer: <b>${offersSummary}</b>`,
+      `nurture sequence: <b>${(nurtureSequence||'not specified').toLowerCase()}</b>`
+    ];
+    pills.forEach(txt=>{
+      const el = document.createElement('div');
+      el.className = 'recap-pill';
+      el.innerHTML = txt;
+      recapEl.appendChild(el);
+    });
+
+    // problem connection
+    const problemEl = document.getElementById('problemConnection');
+    if(result.problem_connection && result.problem_connection.trim()){
+      problemEl.textContent = result.problem_connection;
+      problemEl.style.display = 'block';
+    } else {
+      problemEl.style.display = 'none';
+    }
+
+    // body
+    const bodyEl = document.getElementById('resultBody');
+    bodyEl.innerHTML = '';
+    (result.body || []).forEach(p=>{
+      if(p && p.trim()){
+        const el = document.createElement('p');
+        el.textContent = p;
+        bodyEl.appendChild(el);
+      }
+    });
+
+    // next steps — title + one-line detail, not dense paragraphs
+    const stepsEl = document.getElementById('nextSteps');
+    stepsEl.innerHTML = '';
+    (result.next_steps || []).forEach(s=>{
+      if(s && (s.title || s.detail)){
+        const li = document.createElement('li');
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'step-title';
+        titleSpan.textContent = s.title || '';
+        const detailSpan = document.createElement('span');
+        detailSpan.className = 'step-detail';
+        detailSpan.textContent = s.detail || '';
+        li.appendChild(titleSpan);
+        li.appendChild(detailSpan);
+        stepsEl.appendChild(li);
+      }
+    });
+
+    // positioning nudge — only shown when the AI detected real confusion
+    const positioningBox = document.getElementById('positioningBox');
+    const positioningList = document.getElementById('positioningList');
+    positioningList.innerHTML = '';
+    if(result.positioning_nudge && result.positioning_nudge.length){
+      result.positioning_nudge.forEach(q=>{
+        if(q && q.trim()){
+          const li = document.createElement('li');
+          li.textContent = q;
+          positioningList.appendChild(li);
+        }
+      });
+      positioningBox.style.display = 'block';
+    } else {
+      positioningBox.style.display = 'none';
+    }
+
+    // example hook
+    const hookBox = document.getElementById('hookBox');
+    if(result.example_hook && result.example_hook.trim()){
+      document.getElementById('hookText').textContent = result.example_hook;
+      hookBox.style.display = 'block';
+    } else {
+      hookBox.style.display = 'none';
+    }
+
+    document.getElementById('resultSkip').textContent = result.skip || '';
+
+    document.getElementById('loadingSection').style.display = 'none';
+    document.getElementById('resultSection').style.display = 'block';
+    rotateNeedle('resultNeedle', info.angle, 100);
+
+    // store lead in the Google Sheet via our own serverless function
+    try{
+      const leadPayload = { email, followers, frequency, sellDescription, niche, listSize, emailFrequency, nurtureSequence, offersSummary, goal, problem, linkedinUrl, category: result.category, headline: result.headline };
+      currentLeadPayload = leadPayload; // kept so the tier-2 flow can send an updated row
+      await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadPayload)
+      });
+    }catch(storageErr){
+      console.error('Lead storage failed', storageErr);
+    }
+
+  }catch(err){
+    clearInterval(loadingInterval);
+    console.error(err);
+    document.getElementById('loadingSection').style.display = 'none';
+    document.getElementById('formCard').style.display = 'block';
+    errorMsg.textContent = "Something went wrong reading your info — mind trying again?";
+    errorMsg.style.display = 'block';
+  }
+});
+
+function resetForm(){
+  document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('funnelGateCard').style.display = 'none';
+  document.getElementById('funnelLoadingSection').style.display = 'none';
+  document.getElementById('funnelResultSection').style.display = 'none';
+  document.getElementById('formCard').style.display = 'block';
+  document.getElementById('moveForm').reset();
+  screenshots = [];
+  document.getElementById('uploadText').textContent = 'Click to upload screenshots';
+  document.getElementById('thumbRow').innerHTML = '';
+  uploadBox.classList.remove('has-file');
+  document.querySelectorAll('.offer-row').forEach(r=>r.classList.remove('checked'));
+  document.getElementById('formCard').scrollIntoView({behavior:'smooth'});
+}
+
+document.getElementById('unlockFunnelBtn').addEventListener('click', ()=>{
+  document.getElementById('funnelGateCard').style.display = 'block';
+  document.getElementById('funnelGateCard').scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('funnelSubmitBtn').addEventListener('click', async ()=>{
+  const funnelErrorMsg = document.getElementById('funnelErrorMsg');
+  funnelErrorMsg.style.display = 'none';
+
+  const timePerWeek = document.getElementById('timePerWeek').value;
+  const adBudget = document.getElementById('adBudget').value;
+  const timeline = document.getElementById('timeline').value;
+
+  if(!timePerWeek || !adBudget || !timeline){
+    funnelErrorMsg.textContent = "Just need the time, budget, and timeline questions answered.";
+    funnelErrorMsg.style.display = 'block';
+    return;
+  }
+  if(!tier1Data){
+    funnelErrorMsg.textContent = "Something went missing from your first result — try running the tool again from the top.";
+    funnelErrorMsg.style.display = 'block';
+    return;
+  }
+
+  document.getElementById('funnelGateCard').style.display = 'none';
+  document.getElementById('funnelLoadingSection').style.display = 'block';
+  let fMsgIdx = 0;
+  const funnelLoadingMessages = ["Mapping the funnel…", "Sizing it to your time and budget…", "Sequencing the stages…", "Putting it in plain English…"];
+  document.getElementById('funnelLoadingText').textContent = funnelLoadingMessages[0];
+  const funnelLoadingInterval = setInterval(()=>{
+    fMsgIdx = (fMsgIdx+1) % funnelLoadingMessages.length;
+    document.getElementById('funnelLoadingText').textContent = funnelLoadingMessages[fMsgIdx];
+  }, 1800);
+
+  try{
+    const funnelData = { ...tier1Data, timePerWeek, adBudget, timeline };
+    const result = await analyzeFunnel(funnelData);
+    clearInterval(funnelLoadingInterval);
+
+    document.getElementById('funnelIntro').textContent = result.intro || '';
+    const stagesEl = document.getElementById('funnelStages');
+    stagesEl.innerHTML = '';
+    (result.stages || []).forEach(s=>{
+      const row = document.createElement('div');
+      row.className = 'funnel-stage';
+      row.innerHTML = `<div class="funnel-stage-name">${s.name}</div><div class="funnel-stage-tactic">${s.tactic}</div>`;
+      stagesEl.appendChild(row);
+    });
+    document.getElementById('funnelTimelineNote').textContent = result.timeline_note || '';
+    document.getElementById('funnelClosing').textContent = result.closing || '';
+
+    document.getElementById('funnelLoadingSection').style.display = 'none';
+    document.getElementById('funnelResultSection').style.display = 'block';
+    document.getElementById('funnelResultSection').scrollIntoView({behavior:'smooth'});
+
+    // log the tier-2 completion as a second row (same email) marked as wanting the full funnel —
+    // simpler than trying to update the original row in a spreadsheet, and just as useful:
+    // filter the sheet by email if you want to see someone's full journey.
+    if(currentLeadPayload){
+      try{
+        await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...currentLeadPayload, timePerWeek, adBudget, timeline, requestedFullFunnel: true })
+        });
+      }catch(storageErr){
+        console.error('Funnel lead update failed', storageErr);
+      }
+    }
+
+  }catch(err){
+    clearInterval(funnelLoadingInterval);
+    console.error(err);
+    document.getElementById('funnelLoadingSection').style.display = 'none';
+    document.getElementById('funnelGateCard').style.display = 'block';
+    funnelErrorMsg.textContent = "Something went wrong building the strategy — mind trying again?";
+    funnelErrorMsg.style.display = 'block';
+  }
+});
+</script>
+
+</body>
+</html>
